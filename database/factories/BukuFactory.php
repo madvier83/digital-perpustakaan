@@ -17,6 +17,7 @@ class BukuFactory extends Factory
     public function definition(): array
     {
         return [
+            'user_id' => $this->faker->numberBetween(1, 2),
             'judul' => $this->faker->sentence(3),
             'kategori_id' => $this->faker->numberBetween(1, 5),
             'deskripsi' => $this->faker->paragraph(),

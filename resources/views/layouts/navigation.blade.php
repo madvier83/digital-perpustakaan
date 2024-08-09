@@ -18,10 +18,15 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     <x-nav-link :href="route('buku.index')" :active="request()->routeIs('buku.*')">
-                        {{ __('Buku') }}
+                        {{ __('Perpustakaan') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('kategori.index')" :active="request()->routeIs('kategori.*')">
-                        {{ __('Kategori') }}
+                    @if (auth()->user()->role === 'admin')
+                        <x-nav-link :href="route('kategori.index')" :active="request()->routeIs('kategori.*')">
+                            {{ __('Kategori') }}
+                        </x-nav-link>
+                    @endif
+                    <x-nav-link :href="route('buku-saya.index')" :active="request()->routeIs('buku-saya.*')">
+                        {{ __('Buku saya') }}
                     </x-nav-link>
                 </div>
             </div>

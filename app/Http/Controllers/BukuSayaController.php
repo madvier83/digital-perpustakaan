@@ -8,32 +8,32 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class BukuController extends Controller
+class BukuSayaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        // $bukus = Buku::with('kategori')->orderBy("created_at", "desc")->get();
+        $user = Auth::user();
+        $bukus = $user->bukus;
 
         $kategoris = Kategori::orderBy('created_at', 'desc')->get();
         $selectedKategori = $request->input('kategori_id');
 
-        $bukus = Buku::with('kategori')->orderBy("created_at", "desc")->when($selectedKategori, function ($query, $selectedKategori) {
-            return $query->where('kategori_id', $selectedKategori);
-        })->get();
-
-        return view('buku.index', ['bukus' => $bukus, 'kategoris' => $kategoris, 'selectedKategori' => $selectedKategori]);
+        return view('buku-saya.index', ['bukus' => $bukus, 'kategoris' => $kategoris, 'selectedKategori' => $selectedKategori]);
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
         $kategoris = Kategori::orderBy('created_at', 'desc')->get();
-        return view('buku.create', ['kategoris' => $kategoris]);
+        return view('buku-saya.create', ['kategoris' => $kategoris]);
     }
 
     /**
@@ -42,7 +42,6 @@ class BukuController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
             'judul' => 'required|string|max:255',
             'kategori_id' => 'required|exists:kategoris,id',
             'deskripsi' => 'required|string',
@@ -52,11 +51,11 @@ class BukuController extends Controller
         ]);
 
         if ($request->hasFile('file')) {
-            $validated['file'] = $request->file('file')->store('files', 'public');
+            $validated['file'] = $request->file('file')->store('files');
         }
 
         if ($request->hasFile('cover')) {
-            $validated['cover'] = $request->file('cover')->store('covers', 'public');
+            $validated['cover'] = $request->file('cover')->store('covers');
         }
 
         Buku::create($validated);
@@ -69,7 +68,8 @@ class BukuController extends Controller
      */
     public function show(Buku $buku)
     {
-        return view('buku.show', ['buku' => $buku]);
+        dd($buku);
+        return view('buku-saya.show', ['buku' => $buku]);
     }
 
     /**
@@ -77,12 +77,8 @@ class BukuController extends Controller
      */
     public function edit(Buku $buku)
     {
-        if (Auth::user()->role !== 'admin' && $buku->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         $kategoris = Kategori::orderBy('created_at', 'desc')->get();
-        return view('buku.edit', ['buku' => $buku, 'kategoris' => $kategoris]);
+        return view('buku-saya.edit', ['buku' => $buku, 'kategoris' => $kategoris]);
     }
 
     /**
@@ -90,10 +86,6 @@ class BukuController extends Controller
      */
     public function update(Request $request, Buku $buku)
     {
-        if (Auth::user()->role !== 'admin' && $buku->user_id !== Auth::id()) {
-            return redirect()->route('buku.index')->with('error', 'Unauthorized action.');
-        }
-
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
             'kategori_id' => 'required|string|max:255',
@@ -125,7 +117,7 @@ class BukuController extends Controller
 
         $buku->update($validated);
 
-        return redirect('buku');
+        return redirect('buku-saya');
     }
 
     /**
@@ -135,6 +127,6 @@ class BukuController extends Controller
     {
         $buku->delete();
 
-        return redirect('buku');
+        return redirect('buku-saya');
     }
 }

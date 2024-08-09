@@ -41,7 +41,7 @@
                                                         method="POST">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button onclick="return confirm('Hapus kategori permanen?')"
+                                                        <button onclick="return confirm('Hapus kategori permanen? Semua buku yang menggunakan kategori ini akan dipindahkan ke Uncategorized')"
                                                             class="btn btn-xs btn-error text-white">Delete</button>
                                                     </form>
                                                 </div>

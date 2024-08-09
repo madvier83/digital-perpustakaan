@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Buku extends Model
 {
     protected $fillable = [
+        'user_id',
         'judul',
         'kategori_id',
         'deskripsi',
@@ -20,5 +21,10 @@ class Buku extends Model
     public function kategori()
     {
         return $this->belongsTo(Kategori::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

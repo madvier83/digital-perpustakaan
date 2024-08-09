@@ -2,11 +2,9 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Perpustakaan') }}
+                {{ __('Buku Saya') }}
             </h2>
-            @if (auth()->user()->role === 'admin')
-                <a href="/buku/create" class="btn btn-primary btn-sm text-white">Tambah Buku</a>
-            @endif
+            <a href="/buku/create" class="btn btn-primary btn-sm text-white">Tambah Buku</a>
         </div>
     </x-slot>
 
@@ -15,7 +13,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
 
-                    <form action="{{ route('buku.index') }}" method="GET" class="mb-8">
+                    {{-- <form action="{{ route('buku-saya.index') }}" method="GET" class="mb-8">
                         <label class="form-control w-full max-w-md mt-2">
                             <div class="label">
                                 <span class="label-text font-bold">Filter berdasarkan Kategori</span>
@@ -31,7 +29,7 @@
                                 @endforeach
                             </select>
                         </label>
-                    </form>
+                    </form> --}}
 
                     <div class="overflow-x-auto">
                         <table class="table ">
@@ -39,7 +37,6 @@
                             <thead>
                                 <tr class="text-black">
                                     <th>#</th>
-                                    <th>Author</th>
                                     <th>Cover</th>
                                     <th>Judul</th>
                                     <th>Kategori</th>
@@ -52,7 +49,6 @@
                                 @foreach ($bukus as $buku)
                                     <tr>
                                         <th>{{ $loop->iteration }}</th>
-                                        <td>{{ $buku->user->name }}</td>
                                         <td>
                                             <a href="/buku/{{ $buku->id }}">
                                                 <img class="w-10 h-10 border cursor-pointer transition-all duration-200 hover:brightness-50"
@@ -60,25 +56,22 @@
                                                     alt="{{ $buku->cover }}">
                                             </a>
                                         </td>
-                                        <td>{{ Str::limit($buku->judul, 20) }}</td>
+                                        <td>{{ Str::limit($buku->judul, 30) }}</td>
                                         <td>{{ $buku->kategori->nama }}</td>
-                                        <td>{{ Str::limit($buku->deskripsi, 40) }}</td>
+                                        <td>{{ Str::limit($buku->deskripsi, 50) }}</td>
                                         <td>{{ $buku->jumlah }}</td>
                                         <td>
                                             <div class="flex gap-2">
                                                 <a href="buku/{{ $buku->id }}"
                                                     class="btn btn-xs btn-info text-white">Detail</a>
-                                                @if (auth()->user()->role === 'admin')
-                                                    <a href="buku/{{ $buku->id }}/edit"
-                                                        class="btn btn-xs btn-success text-white">Edit</a>
-                                                    <form action="{{ route('buku.destroy', $buku->id) }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button onclick="return confirm('Hapus buku permanen?')"
-                                                            class="btn btn-xs btn-error text-white">Delete</button>
-                                                    </form>
-                                                @endif
+                                                <a href="buku/{{ $buku->id }}/edit"
+                                                    class="btn btn-xs btn-success text-white">Edit</a>
+                                                <form action="{{ route('buku.destroy', $buku->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button onclick="return confirm('Hapus buku permanen?')"
+                                                        class="btn btn-xs btn-error text-white">Delete</button>
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>

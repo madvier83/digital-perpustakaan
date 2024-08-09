@@ -2,10 +2,10 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Tabel Buku') }}
+                {{ __('Perpustakaan') }}
             </h2>
 
-            <a href="/buku" class="btn btn-sm">Kembali</a>
+            <a href="{{ url()->previous() }}" class="btn btn-sm">Kembali</a>
         </div>
     </x-slot>
 

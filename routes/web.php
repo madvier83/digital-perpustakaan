@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BukuController;
+use App\Http\Controllers\BukuSayaController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -20,7 +21,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('buku', BukuController::class);
-    Route::resource('kategori', KategoriController::class);
+    Route::resource('buku-saya', BukuSayaController::class);
+
+    Route::middleware(['role:admin'])->group(function () {
+        Route::resource('kategori', KategoriController::class);
+    });
 });
 
 require __DIR__ . '/auth.php';

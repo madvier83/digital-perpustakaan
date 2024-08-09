@@ -2,10 +2,10 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Tabel Buku') }}
+                {{ __('Perpustakaan') }}
             </h2>
 
-            <a href="/buku" class="btn btn-sm">Kembali</a>
+            <a href="{{ url()->previous() }}" class="btn btn-sm">Kembali</a>
         </div>
     </x-slot>
 
@@ -16,6 +16,7 @@
                     <h1 class="text-xl font-bold mb-4">Tambah Buku</h1>
                     <form action="{{ route('buku.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
+                        <input type="hidden" name="user_id" value="{{ Auth::id() }}">
                         <label class="form-control w-full max-w-md mt-2">
                             <div class="label">
                                 <span class="label-text">Judul</span>
